@@ -3,4 +3,4 @@ This repo aims to solve the worst-case delay of relatively complicated network a
 
 Additionally, while each approach here has advantages and shortcomings, they often provide different delay bounds with more or less pessimism, and a comprehensive comparison is still missing. More than this, when one considers a switched network (e.g., Ethernet, TSN, AFDX, NoC), how sending protocol2 and network topology 3 settings affect data/packet transmission within the web is insufficiently discussed, which leads that the worst-case delay analysis is often studied under a specified networking scenario, in other words, the formalization of worst-case delay analysis remains difficult to be generalized.
 
-Lijie Yang. Worst-case delay analysis: a simulation-based comparison between Flow Aggregation and CPA. LORIA (Université de Lorraine, CNRS, INRIA); Carnegie Mellon University. 2023. ⟨hal-03970717⟩
+Lijie Yang. Worst-case delay analysis: a simulation-based comparison between Flow Aggregation and CPA. LORIA (Université de Lorraine, CNRS, INRIA); Carnegie Mellon University. 2023. [⟨hal-03970717⟩]([url](https://hal.science/hal-03970717/)https://hal.science/hal-03970717/)
