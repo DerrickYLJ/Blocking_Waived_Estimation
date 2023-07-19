@@ -1,0 +1,123 @@
+% Initialize VLs
+VL1 = rtcpjd(1,0,0);
+VL4 = rtcpjd(8,0,0);
+VL8=rtcpjd(16,0,0);
+VL11=rtcpjd(32,0,0);
+VL2=rtcpjd(4,0,0);
+VL3=rtcpjd(16,0,0);
+VL7 = rtcpjd(16,0,0);
+VL9 = rtcpjd(64,0,0);
+VL5 = rtcpjd(4,0,0);
+VL10 = rtcpjd(8,0,0);
+VL12 = rtcpjd(16,0,0);
+VL6=rtcpjd(2,0,0);
+VL13=rtcpjd(8,0,0);
+
+% Initialize Sources
+CPU1 = rtcfs(1);
+CPU2 = rtcfs(1);
+CPU3 = rtcfs(1);
+CPU4 = rtcfs(1);
+
+% Initialize Switches
+SwitchA = rtctdma(5, 10, 1);
+SwitchB = rtctdma(5, 10, 1);
+rate = 1;
+r = rate;
+
+% Initialize e and d (ms)
+VL1e = 8/1000; VL4e = 30/1000; VL8e = 14/1000; VL11e = 121/1000; VL2e = 8/1000; VL3e = 30/1000; VL7e = 14/1000; VL9e = 121/1000; VL10e = 30/1000; VL12e = 14/1000; VL6e = 8/1000; VL13e = 30/1000;
+VL1d = 1; VL4d = 8; VL8d = 16; VL11d = 32; VL2d = 4; VL3d = 16; VL7d = 16; VL9d = 64; VL5d = 4; VL10d = 8; VL12d = 16; VL6d = 2; VL13d = 8; VL5e = 8/1000;
+
+% CPU1 => BUS A
+[a1VL1 bC1VL1 delC1VL1 buf1] = rtcgpc(VL1, CPU1, VL1e);
+[a1VL4 bC1VL4 delC1VL4 buf2] = rtcgpc(VL4, bC1VL1, VL4e);
+[a1VL8 bC1VL8 delC1VL8 buf3] = rtcgpc(VL8, bC1VL4, VL8e);
+[a1VL11 bC1VL11 delC1VL11 buf4] = rtcgpc(VL11, bC1VL8, VL11e);
+% CPU2 => BUS B
+[a1VL2 bC2VL2 delC2VL2 buf8] = rtcgpc(VL2, CPU2, VL2e);
+[a1VL3 bC2VL3 delC2VL3 buf9] = rtcgpc(VL3, bC2VL2, VL3e);
+[a1VL7 bC2VL7 delC2VL7 buf10] = rtcgpc(VL7, bC2VL3, VL7e);
+[a1VL9 bC2VL9 delC2VL9 buf11] = rtcgpc(VL9, bC2VL7, VL9e);
+% CPU3 => BUS A
+[a1VL5 bC3VL5 delC3VL5 buf5] = rtcgpc(VL5, CPU3, VL5e);
+[a1VL10 bC3VL10 delC3VL4 buf6] = rtcgpc(VL10, bC3VL5, VL10e);
+[a1VL12 bC3VL12 delC3VL8 buf7] = rtcgpc(VL12, bC3VL10, VL12e);
+% CPU4 => BUS B
+[a1VL6 bC4VL6 delC4VL6 buf12] = rtcgpc(VL6, CPU4, VL6e);
+[a1VL13 bC4VL13 delC4VL13 buf13] = rtcgpc(VL13, bC4VL6, VL13e);
+
+% 1st Stage transmission (Switch Transmission)
+% BUS A => BUS B
+[a2VL1 bSAVL1 delSAVL1 buf14] = rtcgpc(a1VL1, SwitchA, VL1e);
+[a2VL8 bSAVL8 delSAVL8 buf15] = rtcgpc(a1VL8, SwitchA, VL8e);
+[a2VL10 bSAVL10 delSAVL4 buf16] = rtcgpc(a1VL10, SwitchA, VL10e);
+[a2VL11 bSAVL11 delSAVL11 buf17] = rtcgpc(a1VL11, SwitchA, VL11e);
+% BUS B => BUS A
+[a2VL2 bSBVL2 delSBVL2 buf18] = rtcgpc(a1VL2, SwitchB, VL2e);
+[a2VL3 bSBVL3 delSBVL3 buf19] = rtcgpc(a1VL3, SwitchB, VL3e);
+[a2VL7 bSBVL7 delSBVL7 buf20] = rtcgpc(a1VL7, SwitchB, VL7e);
+[a2VL9 bSBVL9 delSBVL9 buf21] = rtcgpc(a1VL9, SwitchB, VL9e);
+[a2VL6 bSBVL6 delSBVL6 buf22] = rtcgpc(a1VL6, SwitchB, VL6e);
+[a2VL13 bSBVL13 delSBVL13 buf23] = rtcgpc(a1VL13, SwitchB, VL13e);
+
+% 2nd Stage transmission (Sending to destination)
+% BUS A => 1
+[a3VL2 bSAVL2 delSAVL2 buf24] = rtcgpc(a2VL2, SwitchA, VL2e);
+[a3VL7 bSAVL7 delSAVL7 buf25] = rtcgpc(a2VL7, SwitchA, VL7e);
+[a3VL9 bSAVL9 delSAVL9 buf26] = rtcgpc(a2VL9, SwitchA, VL9e);
+[a3VL6 bSAVL6 delSAVL6 buf36] = rtcgpc(a2VL6, SwitchA, VL6e);
+[a2VL5 bSAVL5 delSAVL5 buf27] = rtcgpc(a1VL5, SwitchA, VL5e);
+[a2VL12 bSAVL12 delSAVL12 buf28] = rtcgpc(a1VL13, SwitchA, VL12e);
+% BUS A => 3
+[a3VL3 bSAVL3 delSAVL3 buf29] = rtcgpc(a2VL3, SwitchA, VL3e);
+[a2VL4 bSAVL4 delSAVL4 buf30] = rtcgpc(a1VL4, SwitchA, VL4e);
+[a3VL13 bSAVL13 delSAVL13 buf31] = rtcgpc(a2VL13, SwitchA, VL13e);
+% BUS B => 2
+[a3VL1 bSBVL1 delSBVL1 buf32] = rtcgpc(a2VL1, SwitchB, VL1e);
+[a3VL8 bSBVL8 delSBVL8 buf33] = rtcgpc(a2VL8, SwitchB, VL8e);
+[a3VL11 bSBVL11 delSBVL11 buf34] = rtcgpc(a2VL11, SwitchB, VL11e);
+% BUS B => 4
+[a3VL10 bSBVL10 delSBVL1 buf35] = rtcgpc(a2VL10, SwitchB, VL10e);
+
+% 3rd Stage: Send out Completion
+% Dest: 1
+[a4VL2 bC1VL2 delC1VL2 buf37] = rtcgpc(a3VL2, bC1VL8, VL2e);
+[a4VL7 bC1VL7 delC1VL7 buf38] = rtcgpc(a3VL7, bC1VL2, VL7e);
+[a4VL9 bC1VL9 delC1VL9 buf39] = rtcgpc(a3VL9, bC1VL7, VL9e);
+[a4VL6 bC1VL6 delC1VL6 buf40] = rtcgpc(a3VL6, bC1VL9, VL6e);
+[a3VL5 bC1VL5 delC1VL5 buf41] = rtcgpc(a2VL5, bC1VL6, VL5e);
+[a3VL12 bC1VL12 delC1VL12 buf41] = rtcgpc(a2VL13, bC1VL5, VL12e);
+% Dest: 3
+[a4VL3 bC3VL3 delC3VL3 buf42] = rtcgpc(a3VL3, bC3VL12, VL3e);
+[a3VL4 bC3VL4 delC3VL4 buf43] = rtcgpc(a2VL4, bC3VL3, VL4e);
+[a4VL13 bC3VL13 delC3VL13 buf44] = rtcgpc(a3VL13, bC3VL4, VL13e);
+% Dest: 2
+[a4VL1 bC2VL1 delC2VL1 buf45] = rtcgpc(a3VL1, bC2VL9, VL1e);
+[a4VL8 bC2VL8 delC2VL8 buf46] = rtcgpc(a3VL8, bC2VL1, VL8e);
+[a4VL11 bC2VL11 delC2VL11 buf47] = rtcgpc(a3VL11, bC2VL8, VL11e);
+% Dest: 4
+[a4VL10 bC4VL10 delC4VL1 buf48] = rtcgpc(a3VL10, bC4VL13, VL10e);
+
+% Delay Calculation
+dVL1 = delC1VL1 + delSAVL1 + delSBVL1 + delC2VL1;
+dVL2 = delC2VL2 + delSBVL2 + delSAVL2 + delC1VL2;
+
+Progress: 
+- Finish the architecture building
+- Complete the code for RTCToolBox on Matlab
+- Analyze the result and find out the difference
+
+issues:
+relatively large discrepancy
+
+1. is "e" different in each scenario?
+    - same "e" for a given stream (soruces will always generate single packet(frame) with the same size peridically)
+    - CPU acutally represents the link between the source and switch in the original architecture or even output port 
+2. CPU initialization
+    - CPUi = rtctcs(1)
+3. BUS initialization
+    - No need to simulate TDMA behavior, full-line speed switch internally. Since it is so fast that the impact can be neglected, it will go directly to output queue 
+    - BUS represented by 3 CPUs 
+4. pjd => distance must be no more than period
+    - to 0 

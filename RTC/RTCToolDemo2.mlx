@@ -1,0 +1,98 @@
+% Initialize VLs
+VL1 = rtcpjd(1000,0,0);
+VL4 = rtcpjd(8000,0,0);
+VL8=rtcpjd(16000,0,0);
+VL11=rtcpjd(32000,0,0);
+VL2=rtcpjd(4000,0,0);
+VL3=rtcpjd(16000,0,0);
+VL7 = rtcpjd(16000,0,0);
+VL9 = rtcpjd(64000,0,0);
+VL5 = rtcpjd(4000,0,0);
+VL10 = rtcpjd(8000,0,0);
+VL12 = rtcpjd(16000,0,0);
+VL6=rtcpjd(2000,0,0);
+VL13=rtcpjd(8000,0,0);
+
+% Initialize Sources
+CPU1 = rtcfs(1);
+CPU2 = rtcfs(1);
+
+% Initialize e and d (ms)
+VL1e = 8; VL4e = 30; VL8e = 14; VL11e = 121; VL2e = 8; 
+VL3e = 30; VL7e = 14; VL9e = 121; VL10e = 30; 
+VL12e = 14; VL6e = 8; VL13e = 30; VL5e = 8;
+
+
+VL1d = 1000; VL4d = 8000; VL8d = 16000; VL11d = 32000; 
+VL2d = 4000; VL3d = 16000; VL7d = 16000; VL9d = 64000; 
+VL5d = 4000; VL10d = 8000; VL12d = 16000; VL6d = 2000; 
+VL13d = 8000;
+
+% ES1 and ES3 to CPU1 
+[a1VL1 bC1VL1 delC1VL1 buf1] = rtcgpc(VL1, CPU1, VL1e);
+[a1VL4 bC1VL4 delC1VL4 buf2] = rtcgpc(VL4, bC1VL1, VL4e);
+[a3VL5 bC3VL5 delC3VL5 buf3] = rtcgpc(VL5, bC1VL4, VL5e);
+
+[a1VL8 bC1VL8 delC1VL8 buf4] = rtcgpc(VL8, bC3VL5, VL8e);
+[a3VL10 bC3VL10 delC3VL10 buf5] = rtcgpc(VL10, bC1VL8, VL10e);
+[a1VL11 bC1VL11 delC1VL11 buf6] = rtcgpc(VL11, bC3VL10, VL11e);
+[a3VL12 bC3VL12 delC3VL12 buf7] = rtcgpc(VL12, bC1VL11, VL12e);
+
+% ES2 and ES4 to CPU2 
+[a2VL2 bC2VL1 delC2VL2 buf8] = rtcgpc(VL2, CPU2, VL2e);
+[a2VL3 bC2VL3 delC2VL3 buf9] = rtcgpc(VL3, bC2VL1, VL3e);
+[a4VL6 bC4VL6 delC4VL6 buf10] = rtcgpc(VL6, bC2VL3, VL6e);
+
+[a2VL7 bC2VL7 delC2VL7 buf11] = rtcgpc(VL7, bC4VL6, VL7e);
+[a2VL9 bC2VL9 delC2VL9 buf12] = rtcgpc(VL9, bC2VL7, VL9e);
+[a4VL13 bC4VL13 delC4VL13 buf13] = rtcgpc(VL13, bC2VL9, VL13e);
+
+% CPU1 to CPU2 and then ES2 and ES4
+[a11VL1 bC11VL1 delC11VL1 buf14] = rtcgpc(a1VL1, bC2VL9, VL1e);
+[a11VL8 bC11VL8 delC11VL8 buf15] = rtcgpc(a1VL8, bC11VL1, VL8e);
+[a11VL10 bC11VL10 delC11VL10 buf16] = rtcgpc(a3VL10, bC11VL8, VL10e);
+[a11VL11 bC11VL11 delC11VL11 buf17] = rtcgpc(a1VL11, bC11VL10, VL11e);
+
+% CPU2 to CPU1 and then ES1 and ES3
+[a21VL2 bC31VL2 delC31VL2 buf18] = rtcgpc(a2VL2, bC3VL12, VL2e);
+[a21VL3 bC31VL3 delC31VL3 buf19] = rtcgpc(a2VL3, bC31VL2, VL3e);
+[a21VL6 bC31VL6 delC31VL6 buf20] = rtcgpc(a4VL6, bC31VL3, VL6e);
+[a21VL7 bC31VL7 delC31VL7 buf21] = rtcgpc(a2VL7, bC31VL6, VL7e);
+[a21VL9 bC31VL9 delC31VL9 buf22] = rtcgpc(a2VL9, bC31VL7, VL9e);
+[a21VL13 bC31VL13 delC31VL13 buf23] = rtcgpc(a4VL13, bC31VL9, VL13e);
+
+
+
+% Delay Calculation
+dVL1 = delC1VL1 + delC11VL1;
+dVL2 = delC2VL2 + delC31VL2;
+dVL3 = delC2VL3 + delC31VL3;
+dVL4 = delC1VL4;
+dVL5 = delC3VL5;
+dVL6 = delC4VL6 + delC31VL6;
+dVL7 = delC2VL7 + delC31VL7;
+dVL8 = delC1VL8 + delC11VL8;
+dVL9 = delC2VL9 + delC31VL9;
+dVL10 = delC3VL10 + delC11VL10;
+dVL11 = delC1VL11 + delC11VL11;
+dVL12 = delC3VL12;
+dVL13 = delC4VL13 + delC31VL13;
+
+Progress: 
+- Finish the architecture building
+- Complete the code for RTCToolBox on Matlab
+- Analyze the result and find out the difference
+
+issues:
+relatively large discrepancy
+
+1. is "e" different in each scenario?
+    - same "e" for a given stream (soruces will always generate single packet(frame) with the same size peridically)
+    - CPU acutally represents the link between the source and switch in the original architecture or even output port 
+2. CPU initialization
+    - CPUi = rtctcs(1)
+3. BUS initialization
+    - No need to simulate TDMA behavior, full-line speed switch internally. Since it is so fast that the impact can be neglected, it will go directly to output queue 
+    - BUS represented by 3 CPUs 
+4. pjd => distance must be no more than period
+    - to 0 
