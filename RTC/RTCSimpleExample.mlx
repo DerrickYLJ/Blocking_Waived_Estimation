@@ -1,3 +1,35 @@
+% Initialize VLs
+VL1 = rtcpjd(3,0,0);
+VL2 = rtcpjd(4,0,0);
+VL3 = rtcpjd(10,0,0);
+VL4 = rtcpjd(10,0,0);
+VL5 = rtcpjd(50,0,0);
+
+% Initialize Sources
+CPU1 = rtcfs(1);
+
+
+% Initialize e and d
+VL1e = 1; VL2e = 1; VL3e = 2; VL4e = 2; VL5e = 0.5;
+VL1d = 12; VL2d = 30; VL3d = 30; VL4d = 90;
+
+% Get through the switch 
+[aVL1 bVL1 delVL1 buf1] = rtcgpc(VL1, CPU1, VL1e);
+[aVL2 bVL2 delVL2 buf2] = rtcgpc(VL2, bVL1, VL2e);
+[aVL3 bVL3 delVL3 buf3] = rtcgpc(VL3, bVL2, VL3e);
+[aVL4 bVL4 delVL4 buf4] = rtcgpc(VL4, bVL3, VL4e);
+[aVL5 bVL5 delVL5 buf5] = rtcgpc(VL5, bVL4, VL5e);
+Correct Answer: 3, 4, 8, 9.5, 59.5
+RTC Answer:     1, 2, 6, 15, 59.5
+
+
+
+
+
+
+
+
+
 
 % Initialize VLs
 VL1 = rtcpjd(12,0,0);
