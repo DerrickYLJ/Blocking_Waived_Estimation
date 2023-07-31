@@ -22,7 +22,6 @@ def read_input_file(file_path):
     return doc
 
 def compute_recurrent(maxC, i, I_curr, I_prev, execution_list, period_list, count):
-    print(i, I_prev, I_curr, maxC)
     if I_curr == I_prev and (count != 0):
         return I_curr
     else:
@@ -38,7 +37,7 @@ def worst_case_compute(index_list, execution_list, period_list):
     for i in index_list[:(len(index_list)-1)]:
         i = i-1
         maxC = max(execution_list[(i+1):])
-        I = maxC+compute_recurrent(maxC, i, 0, 0, execution_list, period_list, 0)
+        I = execution_list[i]+compute_recurrent(maxC, i, 0, 0, execution_list, period_list, 0)
         result[i] = I
     result[-1] = 1
     return result
