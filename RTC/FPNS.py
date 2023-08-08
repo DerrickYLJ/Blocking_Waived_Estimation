@@ -8,6 +8,7 @@ import numpy as np
 import csv
 import os
 import pandas as pd
+import matplotlib.pyplot as plt
 
 # parse arguments
 def parse_args():
@@ -75,6 +76,9 @@ if __name__ == "__main__":
     myKeys = list(dic.keys())
     myKeys.sort()
     sorted_dict = [(key, dic[key]) for key in myKeys]
+    plt.plot([key for (key, value) in sorted_dict], [value for (key, value) in sorted_dict], "*-")
+    plt.plot([key for (key, value) in sorted_dict], [205, 235, 408, 310, 175, 197, 261, 245, 475, 362, 456, 203, 422], "o-")
+    plt.show()
     print(sorted_dict)
 
 
