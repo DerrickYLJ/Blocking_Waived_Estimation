@@ -34,8 +34,8 @@ def compute_recurrent(maxC, i, I_curr, I_prev, execution_list, period_list, coun
 
 def worst_case_compute(index_list, execution_list, period_list):
     result = np.zeros(len(index_list))
+    print(index_list[:(len(index_list)-1)])
     for i in range(len(index_list)-1):
-        i = i-1
         maxC = max(execution_list[(i+1):])
         I = execution_list[i]+compute_recurrent(maxC, i, 0, 0, execution_list, period_list, 0)
         result[i] = I
