@@ -67,10 +67,14 @@ if __name__ == "__main__":
     with open(args.csv_output, 'r') as result: 
         reader = csv.reader(result, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
         for row in reader:
-            if row[0] in dic:
-                dic[row[0]] += float(row[1])
+            key = int(row[0])
+            if key in dic:
+                dic[key] += float(row[1])
             else:
-                dic[row[0]] = float(row[1])
-    print(dic)
+                dic[key] = float(row[1])
+    myKeys = list(dic.keys())
+    myKeys.sort()
+    sorted_dict = [(key, dic[key]) for key in myKeys]
+    print(sorted_dict)
 
 
