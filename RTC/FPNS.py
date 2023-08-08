@@ -44,7 +44,7 @@ def worst_case_compute(index_list, execution_list, period_list):
 
 def process_input_files(folder_path, writer):
     for filename in os.listdir(folder_path):
-        if filename.endswith('.csv'):
+        if filename.endswith('.csv') and filename[0] != 't':
             file_path = os.path.join(folder_path, filename)
             print(f"Calculating the worst case delay of this architecture: {file_path}. ")
             streams = read_input_file(file_path)
@@ -60,8 +60,17 @@ def process_input_files(folder_path, writer):
 if __name__ == "__main__":
     args = parse_args()
     folder_path = "FPNS_small_test"
+    dic={}
     with open(args.csv_output, 'w') as result: 
         writer = csv.writer(result, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
         process_input_files(folder_path, writer)
+    with open(args.csv_output, 'r') as result: 
+        reader = csv.reader(result, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+        for row in reader:
+            if row[0] in dic:
+                dic[row[0]] += float(row[1])
+            else:
+                dic[row[0]] = float(row[1])
+    print(dic)
 
 
