@@ -40,7 +40,7 @@ def worst_case_compute(index_list, execution_list, period_list):
         maxC = max(execution_list[(i+1):])
         I = execution_list[i]+compute_recurrent(maxC, i, 0, 0, execution_list, period_list, 0)
         result[i] = I
-    result[-1] = 1
+    result[-1] = execution_list[-1]+compute_recurrent(0, len(index_list)-1, 0, 0, execution_list, period_list, 0)
     return result
 
 def process_input_files(folder_path, writer):
