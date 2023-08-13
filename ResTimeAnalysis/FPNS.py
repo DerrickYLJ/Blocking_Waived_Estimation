@@ -39,7 +39,7 @@ def compute_recurrent(maxC, i, I_curr, I_prev, execution_list, period_list, coun
 def worst_case_compute(index_list, execution_list, period_list):
     result = np.zeros(len(index_list))
     print(index_list[:(len(index_list)-1)])
-    for i in range(len(index_list)-1):
+    for i in range(len(index_list)):
         curr_index = index_list[i]
         input_executaion_list=[]
         input_period_list=[]
@@ -52,10 +52,13 @@ def worst_case_compute(index_list, execution_list, period_list):
                     input_executaion_list.append(execution_list[j])
                     input_period_list.append(period_list[j])
                     stream_dictionary[curr_index].add(index_list[j])
-        maxC = max(execution_list[(i+1):])
+        if i != len(index_list)-1:
+            maxC = max(execution_list[(i+1):])
+        else:
+            maxC = 0
         I = execution_list[i]+compute_recurrent(maxC, i, 0, 0, np.array(input_executaion_list), np.array(input_period_list), 0)
         result[i] = I
-    result[-1] = execution_list[-1]+compute_recurrent(0, len(index_list)-1, 0, 0, execution_list, period_list, 0)
+    # result[-1] = execution_list[-1]+compute_recurrent(0, len(index_list)-1, 0, 0, execution_list, period_list, 0)
     return result
 
 def process_input_files(folder_path, writer):
@@ -111,4 +114,7 @@ if __name__ == "__main__":
     mykeys.sort()
     sorted_dict = [(key, final_result[key]) for key in myKeys]
     print(sorted_dict)
+    plt.plot([key for (key, value) in sorted_dict], [value for (key, value) in sorted_dict], "*-")
+    plt.plot([key for (key, value) in sorted_dict], [205, 235, 408, 310, 175, 197, 261, 245, 475, 362, 456, 203, 422], "o-")
+    plt.show()
 
