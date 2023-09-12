@@ -52,19 +52,30 @@ def worst_case_compute(index_list, execution_list, period_list):
                     input_executaion_list.append(execution_list[j])
                     input_period_list.append(period_list[j])
                     stream_dictionary[curr_index].add(index_list[j])
+        maxC = 0
+        print(stream_dictionary)
         if i != len(index_list)-1:
-            maxC = max(execution_list[(i+1):])
-        else:
-            maxC = 0
+            for j in range(len(index_list)):
+                ind = index_list[j]
+                if j <= i:
+                    continue
+                else:
+                    if ind not in stream_dictionary[curr_index]:
+                        maxC = execution_list[j] if execution_list[j] > maxC else maxC
+                stream_dictionary[curr_index].add(ind)
+
+            # maxC = max(execution_list[(i+1):])
+            # maxC = max(input_executaion_list) if len(input_executaion_list) != 0 else 0
+
         I = execution_list[i]+compute_recurrent(maxC, i, 0, 0, np.array(input_executaion_list), np.array(input_period_list), 0)
         result[i] = I
     # result[-1] = execution_list[-1]+compute_recurrent(0, len(index_list)-1, 0, 0, execution_list, period_list, 0)
     return result
 
 def process_input_files(folder_path, writer):
-    s = {'A','B','C','D', 'E', 'F'}
+    s = {'F'}
     for filename in os.listdir(folder_path):
-        if filename.endswith('.csv') and filename[0] in s:
+        if filename.endswith('.csv') and filename[0] not in s:
             file_path = os.path.join(folder_path, filename)
             print(f"Calculating the worst case delay of this architecture: {file_path}. ")
             with open(file_path, 'r') as file:
