@@ -44,7 +44,7 @@ def worst_case_compute(index_list, execution_list, period_list, jitter_list):
         input_executaion_list=[]
         input_period_list=[]
         input_jitter_list=[]
-        # Start exclusing streams that have blocked before
+        # Start excluding streams that have blocked before
         print(stream_dictionary)
         if i != 0:
             for j in range(i):
@@ -68,7 +68,7 @@ def worst_case_compute(index_list, execution_list, period_list, jitter_list):
 def process_input_files(folder_path, writer):
     s = {'f'}
     for filename in os.listdir(folder_path):
-        if filename.endswith('.csv') and filename[0] in s:
+        if filename.endswith('.csv') and filename[0] not in s:
             file_path = os.path.join(folder_path, filename)
             print(f"Calculating the worst case delay of this architecture: {file_path}. ")
             streams = read_input_file(file_path)
@@ -89,37 +89,37 @@ def update_final_result(index, delay):
 if __name__ == "__main__":
     for count in range(1):
         stream_dictionary = { (i+1):set() for i in range(6)}
-        folder_path = "Folder_73"
-        file_name = "yeqs.csv"
+        folder_path = "Folder_74"
+        file_name = "file_output.csv"
         file_path = os.path.join(folder_path, file_name)
         dic={}
         with open(file_path, 'w') as result: 
             writer = csv.writer(result, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
             process_input_files(folder_path, writer)
-        with open(file_path, 'r') as result: 
-            reader = csv.reader(result, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-            for row in reader:
-                key = int(float(row[0]))
-                if key in dic:
-                    dic[key] += float(row[1])
-                else:
-                    dic[key] = float(row[1])
-        myKeys = list(dic.keys())
-        myKeys.sort()
-        sorted_dict = [(key, dic[key]) for key in myKeys]
-        # plt.plot([key for (key, value) in sorted_dict], [value for (key, value) in sorted_dict], "*-")
-        # plt.plot([key for (key, value) in sorted_dict], [205, 235, 408, 310, 175, 197, 261, 245, 475, 362, 456, 203, 422], "o-")
-        # plt.show()
-        print(sorted_dict)
-        for (key, value) in sorted_dict:
-            update_final_result(key, value)
-    # print out final result
-    print("---------printing final worst case delay----------")
-    mykeys = list(final_result.keys())
-    mykeys.sort()
-    sorted_dict = [(key, final_result[key]) for key in myKeys]
-    print(sorted_dict)
-    # plt.plot([key for (key, value) in sorted_dict], [value for (key, value) in sorted_dict], "*-")
-    # plt.plot([key for (key, value) in sorted_dict], [205, 235, 408, 310, 175, 197, 261, 245, 475, 362, 456, 203, 422], "o-")
-    # plt.show()
+    #     with open(file_path, 'r') as result: 
+    #         reader = csv.reader(result, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+    #         for row in reader:
+    #             key = int(float(row[0]))
+    #             if key in dic:
+    #                 dic[key] += float(row[1])
+    #             else:
+    #                 dic[key] = float(row[1])
+    #     myKeys = list(dic.keys())
+    #     myKeys.sort()
+    #     sorted_dict = [(key, dic[key]) for key in myKeys]
+    #     # plt.plot([key for (key, value) in sorted_dict], [value for (key, value) in sorted_dict], "*-")
+    #     # plt.plot([key for (key, value) in sorted_dict], [205, 235, 408, 310, 175, 197, 261, 245, 475, 362, 456, 203, 422], "o-")
+    #     # plt.show()
+    #     print(sorted_dict)
+    #     for (key, value) in sorted_dict:
+    #         update_final_result(key, value)
+    # # print out final result
+    # print("---------printing final worst case delay----------")
+    # mykeys = list(final_result.keys())
+    # mykeys.sort()
+    # sorted_dict = [(key, final_result[key]) for key in myKeys]
+    # print(sorted_dict)
+    # # plt.plot([key for (key, value) in sorted_dict], [value for (key, value) in sorted_dict], "*-")
+    # # plt.plot([key for (key, value) in sorted_dict], [205, 235, 408, 310, 175, 197, 261, 245, 475, 362, 456, 203, 422], "o-")
+    # # plt.show()
 
