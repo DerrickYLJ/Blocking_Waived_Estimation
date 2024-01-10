@@ -131,7 +131,7 @@ class Architecture():
                 return B1+3*target_link.exec_time
             elif target_link.exec_time <= min(blockings[1:]):
                 return sum(blockings)+target_link.exec_time
-            elif target_link.exec_time >= B2 and target_link.exec_time <= B2:
+            elif target_link.exec_time >= B2 and target_link.exec_time <= B3:
                 return B1+3*target_link.exec_time if B2+B3 <= 2*target_link.exec_time else sum(blockings)+target_link.exec_time
             else:
                 return B1+B2+2*target_link.exec_time
