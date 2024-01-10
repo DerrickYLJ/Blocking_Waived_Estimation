@@ -75,6 +75,8 @@ class Architecture():
     def check_block(self, target_link, block_link, curr_pos):
         destination = target_link.destination 
         next_pos = self.find_next_pos(curr_pos, destination)
+        # if target_link.index == 9:
+        #     print(f"{curr_pos}, {next_pos}, {target_link.destination}")
         block_curr = block_link.source
         block_destination = block_link.destination
         while block_curr != block_destination:
@@ -102,6 +104,8 @@ class Architecture():
                 # decide if it will block the target link 
                 block_link = arch_config.arch_dict[key]
                 if self.check_block(target_link, block_link, curr_pos):
+                    # if target_link.index == 9:
+                    #     print(f"{block_link.index}, {curr_pos}")
                     if block_link.priority < target_link.priority:
                         blocking_set_lower = block_link if blocking_set_lower == None or block_link.exec_time > blocking_set_lower.exec_time else blocking_set_lower                        
                     if block_link.priority >= target_link.priority:
@@ -148,7 +152,7 @@ class Architecture():
             rta_res.append(self.rta_computation(target_link, curr_pos, arch_config))
             # Move current position to next level
             curr_pos = self.find_next_pos(curr_pos, destination)
-        if target_link.index == 12:
+        if target_link.index == 9:
             print(rta_res)
         final_wcd = self.shrink_wcd_new(rta_res, target_link)
         # map this wcd to the corresponding result destination 
@@ -159,6 +163,7 @@ class Architecture():
         destinations = target_link.destinations
         for destination in destinations:
             # compute the wcd for this specific case 
+            target_link.destination = destination
             wcd = self.worst_delay_helper(target_link, destination, arch_config)
             # update wcd in this virtual link with such destination
             self.arch_dict[target_link.index].WCDs[destination] = wcd if destination not in self.arch_dict[target_link.index].WCDs else max(wcd, self.arch_dict[target_link.index].WCDs[destination])
